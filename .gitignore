@@ -1,0 +1,51 @@
+# ---------------------------------------------------------
+# Build output
+# ---------------------------------------------------------
+target/
+build/
+out/
+*.jar
+!.mvn/wrapper/*.jar
+
+# ---------------------------------------------------------
+# IDE
+# ---------------------------------------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# ---------------------------------------------------------
+# OS
+# ---------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------
+# Local development / secrets
+# ---------------------------------------------------------
+.env
+.env.*
+!.env.example
+run/
+server/
+local/
+*.log
+
+# ---------------------------------------------------------
+# Working notes and local tooling state.
+# Only the published documentation is tracked at the root;
+# everything else stays on the maintainer's machine.
+# ---------------------------------------------------------
+/*.md
+!/README.md
+!/CHANGELOG.md
+/notes/
+/.*/
+!/.github/

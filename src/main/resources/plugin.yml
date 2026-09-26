@@ -1,0 +1,29 @@
+name: NexoSync
+version: '${project.version}'
+main: com.sorvia.nexosync.NexoSyncPlugin
+api-version: '1.21'
+description: Centralized Nexo snapshot management and automatic synchronization for Paper and Folia servers.
+authors:
+  - Sorvia Development Solutions
+  - hugefiz-dev
+website: https://sorvia.net
+folia-supported: true
+
+# Nexo is loaded first when present, but NexoSync also starts without it so an
+# administrator can still read /nexosync status and fix the installation.
+softdepend:
+  - Nexo
+
+commands:
+  nexosync:
+    description: Manage Nexo snapshot synchronization.
+    usage: /nexosync help
+    permission: nexosync.admin
+    aliases:
+      - nsync
+      - nxs
+
+permissions:
+  nexosync.admin:
+    description: Provides access to the entire NexoSync command tree.
+    default: op

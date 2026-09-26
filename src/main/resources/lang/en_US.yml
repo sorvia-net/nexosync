@@ -1,0 +1,112 @@
+# =========================================================
+# NexoSync - English (en_US)
+# Developed by Sorvia Development Solutions
+#
+# Messages use MiniMessage markup. Values substituted into
+# {placeholders} are stripped of markup characters, so a
+# file name can never inject formatting.
+#
+# This file is written once and never overwritten by an
+# update; delete it to regenerate the current defaults.
+# =========================================================
+
+prefix: "<dark_gray>[<gold>NexoSync</gold>]</dark_gray> "
+
+general:
+  # Shown wherever a snapshot version would appear but nothing is installed yet.
+  no-snapshot: "none"
+  no-permission: "<red>You do not have permission to use NexoSync.</red>"
+  unknown-command: "<red>Unknown subcommand. Use <yellow>/nexosync help</yellow>.</red>"
+  operation-in-progress: "<yellow>A NexoSync operation is already running: <white>{operation}</white>.</yellow>"
+  not-ready: "<red>NexoSync is not ready yet. Check the console for configuration problems.</red>"
+  unexpected-error: "<red>An unexpected error occurred. See the console for details.</red>"
+  failure-detail: "<gray>Stage <white>{stage}</white>: <red>{reason}</red></gray>"
+  mode-not-publisher: "<red>This server runs in <white>{mode}</white> mode and may not publish snapshots.</red>"
+  mode-not-receiver: "<red>This server runs in <white>{mode}</white> mode and may not install snapshots.</red>"
+
+commands:
+  help:
+    title: "<gold>NexoSync Commands</gold>"
+    push: "<yellow>/nexosync push</yellow> <dark_gray>-</dark_gray> <gray>Publish the current Nexo snapshot.</gray>"
+    check: "<yellow>/nexosync check</yellow> <dark_gray>-</dark_gray> <gray>Check for a newer snapshot.</gray>"
+    update: "<yellow>/nexosync update</yellow> <dark_gray>-</dark_gray> <gray>Install the latest snapshot now.</gray>"
+    status: "<yellow>/nexosync status</yellow> <dark_gray>-</dark_gray> <gray>Show synchronization status.</gray>"
+    rollback: "<yellow>/nexosync rollback [version]</yellow> <dark_gray>-</dark_gray> <gray>Restore a backup.</gray>"
+    backups: "<yellow>/nexosync backups</yellow> <dark_gray>-</dark_gray> <gray>List stored backups.</gray>"
+    reload: "<yellow>/nexosync reload</yellow> <dark_gray>-</dark_gray> <gray>Reload NexoSync configuration.</gray>"
+    version: "<yellow>/nexosync version</yellow> <dark_gray>-</dark_gray> <gray>Show version information.</gray>"
+
+push:
+  started: "<gray>Creating a Nexo snapshot...</gray>"
+  success: "<green>Snapshot <white>{version}</white> was published successfully.</green>"
+  identical: "<yellow>No changes detected. The current content already matches the latest release.</yellow>"
+  changes: "<gray>Changes: <white>{summary}</white></gray>"
+  failed: "<red>Snapshot publishing failed.</red>"
+
+check:
+  started: "<gray>Checking GitHub for a newer snapshot...</gray>"
+  current: "<gray>Installed snapshot: <white>{version}</white></gray>"
+  latest: "<gray>Latest published snapshot: <white>{version}</white></gray>"
+  available: "<green>A new snapshot is available: <white>{version}</white></green>"
+  up-to-date: "<green>Nexo is already up to date.</green>"
+  no-release: "<yellow>The repository contains no eligible NexoSync release yet.</yellow>"
+
+update:
+  started: "<gray>Starting the Nexo snapshot update...</gray>"
+  downloading: "<gray>Downloading snapshot <white>{version}</white>...</gray>"
+  success: "<green>Nexo snapshot <white>{version}</white> was installed successfully.</green>"
+  changes: "<gray>Changes: <white>{summary}</white></gray>"
+  failed: "<red>Nexo snapshot <white>{version}</white> failed to install.</red>"
+
+rollback:
+  started: "<yellow>Starting rollback to snapshot <white>{version}</white>...</yellow>"
+  restoring: "<gray>Restoring snapshot <white>{version}</white>...</gray>"
+  success: "<green>Rollback completed successfully.</green>"
+  failed: "<red>Rollback failed. The backup has been preserved; see the console.</red>"
+  unavailable: "<red>The requested backup is not available.</red>"
+  disabled: "<red>Rollback is disabled in the configuration.</red>"
+  no-backups: "<yellow>No backups have been stored yet.</yellow>"
+  available-title: "<gold>Available backups</gold>"
+  available-entry: "<dark_gray>-</dark_gray> <white>{id}</white> <gray>(snapshot {version})</gray>"
+  invalid-version: "<red><white>{input}</white> is not a snapshot version. Use <yellow>/nexosync rollback list</yellow>.</red>"
+
+status:
+  title: "<gold>NexoSync Status</gold>"
+  mode: "<gray>Mode: <white>{mode}</white></gray>"
+  installed: "<gray>Installed snapshot: <white>{version}</white></gray>"
+  latest: "<gray>Latest snapshot: <white>{version}</white></gray>"
+  state: "<gray>State: <white>{state}</white></gray>"
+  state-up-to-date: "UP TO DATE"
+  state-update-available: "UPDATE AVAILABLE"
+  platform: "<gray>Platform: <white>{platform}</white></gray>"
+  nexo: "<gray>Nexo: <white>{version}</white></gray>"
+  repository: "<gray>Repository: <white>{repository}</white></gray>"
+  next-check: "<gray>Next check: <white>{seconds}s</white></gray>"
+  checks-disabled: "<gray>Automatic checks: <white>disabled</white></gray>"
+  busy: "<yellow>Currently running: <white>{operation}</white></yellow>"
+  github-ok: "<gray>GitHub: <green>connected</green> <dark_gray>(</dark_gray><white>{repository}</white><dark_gray>,</dark_gray> <white>{access}</white><dark_gray>)</dark_gray></gray>"
+  github-failed: "<gray>GitHub: <red>unavailable</red> <dark_gray>-</dark_gray> <red>{reason}</red></gray>"
+
+version:
+  title: "<gold>NexoSync</gold>"
+  plugin: "<gray>Version: <white>{version}</white></gray>"
+  minecraft: "<gray>Minecraft: <white>{version}</white></gray>"
+  platform: "<gray>Platform: <white>{platform}</white></gray>"
+  nexo: "<gray>Nexo: <white>{version}</white></gray>"
+  java: "<gray>Java: <white>{version}</white></gray>"
+  developer: "<gray>Developer: <white>Sorvia Development Solutions</white></gray>"
+
+reload:
+  started: "<gray>Reloading the NexoSync configuration...</gray>"
+  success: "<green>NexoSync configuration reloaded.</green>"
+  failed: "<red>NexoSync configuration reload failed. See the console.</red>"
+
+github:
+  unauthorized: "<red>GitHub authentication failed. Check the configured token.</red>"
+  forbidden: "<red>GitHub denied the request. Check the token's repository permissions.</red>"
+  not-found: "<red>The configured GitHub repository, release or asset was not found.</red>"
+  repository-empty: "<red>The GitHub repository has no commits yet. Add any file to it (a README is enough) and publish again.</red>"
+  rate-limit: "<red>The GitHub API rate limit has been reached.</red>"
+  timeout: "<red>The GitHub request timed out.</red>"
+  server-error: "<red>GitHub returned a server error.</red>"
+  unknown-error: "<red>An unexpected GitHub error occurred.</red>"

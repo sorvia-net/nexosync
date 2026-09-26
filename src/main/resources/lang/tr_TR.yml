@@ -1,0 +1,122 @@
+# =========================================================
+# NexoSync - Türkçe (tr_TR)
+# Sorvia Development Solutions tarafından geliştirilmiştir.
+#
+# Mesajlar MiniMessage biçimlendirmesi kullanır. {yer-tutucu}
+# alanlarına yerleştirilen değerlerden biçimlendirme
+# karakterleri temizlenir; bu sayede bir dosya adı mesaja
+# biçimlendirme enjekte edemez.
+#
+# Bu dosya yalnızca bir kez oluşturulur ve güncellemelerde
+# üzerine yazılmaz. Güncel varsayılanları geri getirmek için
+# dosyayı silmeniz yeterlidir.
+#
+# Kullanmak için config.yml içinde:
+#   plugin:
+#     language: "tr_TR"
+#
+# Bir anahtar eksikse NexoSync o mesajı İngilizce dosyadan
+# alır; yani çeviri eksik kalsa bile hiçbir mesaj kaybolmaz.
+# =========================================================
+
+prefix: "<dark_gray>[<gold>NexoSync</gold>]</dark_gray> "
+
+general:
+  # Bir sürüm numarasının görüneceği yerde henüz kurulu
+  # anlık görüntü yoksa bu yazı kullanılır.
+  no-snapshot: "yok"
+  no-permission: "<red>NexoSync komutlarını kullanma yetkiniz yok.</red>"
+  unknown-command: "<red>Bilinmeyen alt komut. <yellow>/nexosync help</yellow> yazın.</red>"
+  operation-in-progress: "<yellow>Şu anda başka bir NexoSync işlemi çalışıyor: <white>{operation}</white>.</yellow>"
+  not-ready: "<red>NexoSync henüz hazır değil. Yapılandırma hataları için konsolu kontrol edin.</red>"
+  unexpected-error: "<red>Beklenmeyen bir hata oluştu. Ayrıntılar için konsola bakın.</red>"
+  failure-detail: "<gray><white>{stage}</white> aşaması: <red>{reason}</red></gray>"
+  mode-not-publisher: "<red>Bu sunucu <white>{mode}</white> modunda çalışıyor ve anlık görüntü yayınlayamaz.</red>"
+  mode-not-receiver: "<red>Bu sunucu <white>{mode}</white> modunda çalışıyor ve anlık görüntü kuramaz.</red>"
+
+commands:
+  help:
+    title: "<gold>NexoSync Komutları</gold>"
+    push: "<yellow>/nexosync push</yellow> <dark_gray>-</dark_gray> <gray>Mevcut Nexo içeriğini yayınlar.</gray>"
+    check: "<yellow>/nexosync check</yellow> <dark_gray>-</dark_gray> <gray>Yeni anlık görüntü var mı diye bakar.</gray>"
+    update: "<yellow>/nexosync update</yellow> <dark_gray>-</dark_gray> <gray>En son anlık görüntüyü hemen kurar.</gray>"
+    status: "<yellow>/nexosync status</yellow> <dark_gray>-</dark_gray> <gray>Senkronizasyon durumunu gösterir.</gray>"
+    rollback: "<yellow>/nexosync rollback [sürüm]</yellow> <dark_gray>-</dark_gray> <gray>Bir yedeği geri yükler.</gray>"
+    backups: "<yellow>/nexosync backups</yellow> <dark_gray>-</dark_gray> <gray>Kayıtlı yedekleri listeler.</gray>"
+    reload: "<yellow>/nexosync reload</yellow> <dark_gray>-</dark_gray> <gray>NexoSync yapılandırmasını yeniden yükler.</gray>"
+    version: "<yellow>/nexosync version</yellow> <dark_gray>-</dark_gray> <gray>Sürüm bilgilerini gösterir.</gray>"
+
+push:
+  started: "<gray>Nexo anlık görüntüsü oluşturuluyor...</gray>"
+  success: "<green><white>{version}</white> anlık görüntüsü başarıyla yayınlandı.</green>"
+  identical: "<yellow>Değişiklik bulunamadı. Mevcut içerik en son sürümle birebir aynı.</yellow>"
+  changes: "<gray>Değişiklikler: <white>{summary}</white></gray>"
+  failed: "<red>Anlık görüntü yayınlanamadı.</red>"
+
+check:
+  started: "<gray>GitHub üzerinde yeni anlık görüntü aranıyor...</gray>"
+  current: "<gray>Kurulu anlık görüntü: <white>{version}</white></gray>"
+  latest: "<gray>Yayınlanmış en son anlık görüntü: <white>{version}</white></gray>"
+  available: "<green>Yeni bir anlık görüntü mevcut: <white>{version}</white></green>"
+  up-to-date: "<green>Nexo zaten güncel.</green>"
+  no-release: "<yellow>Depoda henüz uygun bir NexoSync sürümü bulunmuyor.</yellow>"
+
+update:
+  started: "<gray>Nexo anlık görüntü güncellemesi başlatılıyor...</gray>"
+  downloading: "<gray><white>{version}</white> anlık görüntüsü indiriliyor...</gray>"
+  success: "<green><white>{version}</white> anlık görüntüsü başarıyla kuruldu.</green>"
+  changes: "<gray>Değişiklikler: <white>{summary}</white></gray>"
+  failed: "<red><white>{version}</white> anlık görüntüsü kurulamadı.</red>"
+
+rollback:
+  started: "<yellow><white>{version}</white> anlık görüntüsüne geri dönülüyor...</yellow>"
+  restoring: "<gray><white>{version}</white> anlık görüntüsü geri yükleniyor...</gray>"
+  success: "<green>Geri yükleme başarıyla tamamlandı.</green>"
+  failed: "<red>Geri yükleme başarısız oldu. Yedek korundu; konsolu kontrol edin.</red>"
+  unavailable: "<red>İstenen yedek bulunamadı.</red>"
+  disabled: "<red>Geri yükleme yapılandırmada kapalı.</red>"
+  no-backups: "<yellow>Henüz kayıtlı bir yedek yok.</yellow>"
+  available-title: "<gold>Mevcut yedekler</gold>"
+  available-entry: "<dark_gray>-</dark_gray> <white>{id}</white> <gray>(anlık görüntü {version})</gray>"
+  invalid-version: "<red><white>{input}</white> geçerli bir sürüm numarası değil. <yellow>/nexosync rollback list</yellow> deneyin.</red>"
+
+status:
+  title: "<gold>NexoSync Durumu</gold>"
+  mode: "<gray>Mod: <white>{mode}</white></gray>"
+  installed: "<gray>Kurulu anlık görüntü: <white>{version}</white></gray>"
+  latest: "<gray>En son anlık görüntü: <white>{version}</white></gray>"
+  state: "<gray>Durum: <white>{state}</white></gray>"
+  state-up-to-date: "GÜNCEL"
+  state-update-available: "GÜNCELLEME MEVCUT"
+  platform: "<gray>Platform: <white>{platform}</white></gray>"
+  nexo: "<gray>Nexo: <white>{version}</white></gray>"
+  repository: "<gray>Depo: <white>{repository}</white></gray>"
+  next-check: "<gray>Sonraki kontrol: <white>{seconds}sn</white></gray>"
+  checks-disabled: "<gray>Otomatik kontrol: <white>kapalı</white></gray>"
+  busy: "<yellow>Şu anda çalışıyor: <white>{operation}</white></yellow>"
+  github-ok: "<gray>GitHub: <green>bağlı</green> <dark_gray>(</dark_gray><white>{repository}</white><dark_gray>,</dark_gray> <white>{access}</white><dark_gray>)</dark_gray></gray>"
+  github-failed: "<gray>GitHub: <red>ulaşılamıyor</red> <dark_gray>-</dark_gray> <red>{reason}</red></gray>"
+
+version:
+  title: "<gold>NexoSync</gold>"
+  plugin: "<gray>Sürüm: <white>{version}</white></gray>"
+  minecraft: "<gray>Minecraft: <white>{version}</white></gray>"
+  platform: "<gray>Platform: <white>{platform}</white></gray>"
+  nexo: "<gray>Nexo: <white>{version}</white></gray>"
+  java: "<gray>Java: <white>{version}</white></gray>"
+  developer: "<gray>Geliştirici: <white>Sorvia Development Solutions</white></gray>"
+
+reload:
+  started: "<gray>NexoSync yapılandırması yeniden yükleniyor...</gray>"
+  success: "<green>NexoSync yapılandırması yeniden yüklendi.</green>"
+  failed: "<red>NexoSync yapılandırması yeniden yüklenemedi. Konsolu kontrol edin.</red>"
+
+github:
+  unauthorized: "<red>GitHub kimlik doğrulaması başarısız. Yapılandırılmış anahtarı kontrol edin.</red>"
+  forbidden: "<red>GitHub isteği reddetti. Anahtarın depo izinlerini kontrol edin.</red>"
+  not-found: "<red>Yapılandırılmış GitHub deposu, sürümü veya dosyası bulunamadı.</red>"
+  repository-empty: "<red>GitHub deposunda henüz hiç commit yok. Depoya herhangi bir dosya ekleyin (bir README yeterli) ve tekrar yayınlayın.</red>"
+  rate-limit: "<red>GitHub API istek sınırına ulaşıldı.</red>"
+  timeout: "<red>GitHub isteği zaman aşımına uğradı.</red>"
+  server-error: "<red>GitHub sunucu hatası döndürdü.</red>"
+  unknown-error: "<red>Beklenmeyen bir GitHub hatası oluştu.</red>"

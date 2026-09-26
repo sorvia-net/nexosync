@@ -1,0 +1,11 @@
+# Normalize everything to LF in the repository. The Maven wrapper is a POSIX
+# shell script: a CRLF shebang makes Linux reject it with "bad interpreter".
+* text=auto eol=lf
+
+# Windows-only scripts must keep CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Never touch binaries.
+*.png binary
+*.jar binary

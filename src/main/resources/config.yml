@@ -1,0 +1,298 @@
+# =========================================================
+# NexoSync
+# Developed by Sorvia Development Solutions
+#
+# Centralized Nexo snapshot management and automatic
+# synchronization for Paper and Folia servers.
+#
+# A snapshot is an immutable copy of the directories listed
+# under sync.paths. Publishing creates a GitHub Release;
+# every other server downloads, verifies and installs it.
+# =========================================================
+
+plugin:
+  # Language file under plugins/NexoSync/lang/.
+  #
+  # Bundled: en_US, tr_TR
+  #
+  # Any other value loads lang/<value>.yml if you created one.
+  # A missing key falls back to English, so a partial
+  # translation never hides a message.
+  language: "en_US"
+
+  # Extra console output. Useful while setting NexoSync up.
+  debug: false
+
+  # Name used in Discord reports and in published manifests.
+  # Leave empty to fall back to the server MOTD.
+  server-name: ""
+
+# ---------------------------------------------------------
+# GitHub
+#
+# NexoSync uses GitHub Releases as the snapshot store. The
+# repository itself can be completely empty; only releases
+# matter.
+# ---------------------------------------------------------
+github:
+  owner: "YOUR_GITHUB_OWNER"
+  repository: "YOUR_NEXOSYNC_REPOSITORY"
+
+  # GitHub REST API base URL.
+  api-base-url: "https://api.github.com"
+
+  # GitHub REST API version header.
+  api-version: "2022-11-28"
+
+  # A ${NAME} reference is resolved from the environment, so
+  # the token never has to be written into this file.
+  #
+  # Publisher server: Contents = Read and write
+  # Receiver server:  Contents = Read
+  token: "${NEXOSYNC_GITHUB_TOKEN}"
+
+  connection:
+    connect-timeout-seconds: 10
+    request-timeout-seconds: 30
+    download-timeout-seconds: 120
+
+  retry:
+    enabled: true
+
+    # Applies to transient failures only (408, 429, 5xx and
+    # connection errors). Authentication failures are never
+    # retried.
+    max-attempts: 3
+    delay-milliseconds: 1500
+
+  release:
+    # Releases whose tag does not start with this prefix are
+    # ignored, so unrelated releases can share the repository.
+    tag-prefix: "nexosync-v"
+    name-format: "NexoSync Snapshot v{version}"
+
+    # A draft or prerelease is never installed automatically
+    # unless enabled here.
+    allow-drafts: false
+    allow-prereleases: false
+
+    asset:
+      name-format: "nexo-snapshot-v{version}.zip"
+      content-type: "application/zip"
+
+# ---------------------------------------------------------
+# Nexo synchronization
+# ---------------------------------------------------------
+sync:
+  # Resolved relative to the server root.
+  nexo-directory: "plugins/Nexo"
+
+  # These directories are fully managed. Anything inside them
+  # that is not part of the installed snapshot is removed
+  # during an update - that is how deleted files propagate.
+  #
+  # Everything outside this list (settings.yml, mechanics.yml,
+  # data/, logs/, ...) is never touched.
+  paths:
+    - "glyphs"
+    - "items"
+    - "pack/external_packs"
+
+  # publisher - may run /nexosync push
+  # receiver  - may check and install releases
+  # both      - may do either
+  mode: "both"
+
+  # Refuse to enable when the Nexo directory is missing.
+  require-nexo-directory: true
+
+# ---------------------------------------------------------
+# Versioning
+#
+# Snapshot versions are independent of the plugin version.
+# ---------------------------------------------------------
+versioning:
+  mode: "increment"
+
+  # Used when the repository holds no NexoSync release yet.
+  initial-version: 1
+
+  tag-format: "nexosync-v{version}"
+  name-format: "NexoSync Snapshot v{version}"
+
+  # Never overwrite a published release.
+  refuse-existing-tag: true
+
+  # Skip publishing when the local content is byte-for-byte
+  # identical to the latest release.
+  skip-identical-snapshot: true
+
+# ---------------------------------------------------------
+# Automatic update checks
+#
+# A check is metadata only. The archive is downloaded only
+# once a newer eligible release actually exists.
+# ---------------------------------------------------------
+update:
+  enabled: true
+
+  check-interval-seconds: 60
+
+  check-on-startup: true
+  startup-delay-seconds: 30
+
+  # Install a newer release automatically. Turn this off to
+  # review each update and install it with /nexosync update.
+  auto-update: true
+
+  require-newer-version: true
+
+  # Never replace a newer snapshot with an older one.
+  allow-downgrade: false
+
+  prevent-concurrent-updates: true
+
+# ---------------------------------------------------------
+# Backups
+#
+# The backup is taken before the first live file is deleted.
+# If it cannot be created, the update is aborted.
+# ---------------------------------------------------------
+backup:
+  enabled: true
+
+  directory: "plugins/NexoSync/backups"
+
+  keep-last: 5
+
+  compress: true
+
+  backup-before-apply: true
+
+# ---------------------------------------------------------
+# Rollback
+# ---------------------------------------------------------
+rollback:
+  enabled: true
+
+  rollback-on-reload-failure: true
+  rollback-on-verification-failure: true
+
+  reload-after-rollback: true
+
+  timeout-seconds: 120
+
+# ---------------------------------------------------------
+# Nexo
+# ---------------------------------------------------------
+nexo:
+  # Refuse to enable when Nexo is not installed.
+  required: true
+
+  reload:
+    # api     - only use Nexo's own API entry point
+    # command - only dispatch the console command below
+    # auto    - try the API, fall back to the command
+    mode: "auto"
+
+    command: "nexo reload"
+
+    timeout-seconds: 120
+
+    # Treat a severe message logged by Nexo during the reload
+    # as a failed reload, which triggers a rollback.
+    fail-on-severe-log: true
+
+  # Wait this long after startup before touching anything, so
+  # NexoSync never races Nexo's own initialization.
+  startup-delay-seconds: 10
+
+# ---------------------------------------------------------
+# Safety limits
+#
+# These bound what a downloaded archive is allowed to do.
+# ---------------------------------------------------------
+safety:
+  max-package-size-mb: 512
+
+  max-file-count: 10000
+
+  reject-symbolic-links: true
+  reject-path-traversal: true
+
+  # Refuse to install a snapshot that contains files outside
+  # this server's own sync.paths.
+  strict-managed-paths: true
+
+# ---------------------------------------------------------
+# Discord
+#
+# Reports never contain tokens, webhook URLs or
+# authorization headers.
+# ---------------------------------------------------------
+discord:
+  enabled: false
+
+  webhook-url: "${NEXOSYNC_DISCORD_WEBHOOK}"
+
+  username: "NexoSync"
+  avatar-url: ""
+
+  events:
+    push-start: false
+    push-success: true
+    push-failure: true
+
+    update-available: true
+    update-start: false
+    update-success: true
+    update-failure: true
+
+    rollback-start: false
+    rollback-success: true
+    rollback-failure: true
+
+    check-failure: true
+    integrity-failure: true
+    github-failure: true
+
+    no-update: false
+    startup: false
+
+  include:
+    server-name: true
+    snapshot-version: true
+    file-count: true
+    duration: true
+    changed-files: true
+    error-details: true
+
+# ---------------------------------------------------------
+# Logging
+# ---------------------------------------------------------
+#
+# The console stays quiet on purpose: it reports outcomes
+# (published, updated, rolled back, failed) but not the
+# individual steps. The log file always records every step,
+# so the detail is there when something needs explaining.
+#
+# Turn plugin.debug on to mirror that detail to the console
+# while setting things up.
+# ---------------------------------------------------------
+logging:
+  console:
+    # The two-line summary printed when the plugin loads.
+    startup: true
+
+    # Operation outcomes.
+    updates: true
+
+    errors: true
+
+  file:
+    enabled: true
+    path: "plugins/NexoSync/logs/nexosync.log"
+
+  debug:
+    # Same effect as plugin.debug.
+    enabled: false

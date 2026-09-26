@@ -11,8 +11,6 @@
 ![Paper](https://img.shields.io/badge/Paper-1.21+-0288D1?style=for-the-badge)
 ![Folia](https://img.shields.io/badge/Folia-supported-7E57C2?style=for-the-badge)
 ![Java](https://img.shields.io/badge/Java-21+-E76F00?style=for-the-badge)
-![Proxy](https://img.shields.io/badge/proxy-not%20required-4CAF50?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-455A64?style=for-the-badge)
 
 *by **Sorvia Development Solutions** · **hugefiz-dev***
 

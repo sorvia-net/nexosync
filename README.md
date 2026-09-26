@@ -54,7 +54,7 @@ No proxy plugin. No database. No server-to-server connection. **Just GitHub.**
 
 <div align="center">
 
-[<img src="https://img.youtube.com/vi/XHST7RUHpL4/maxresdefault.jpg" alt="NexoSync demo video" width="640">](https://www.youtube.com/watch?v=XHST7RUHpL4)
+[![Watch the demo on YouTube](https://img.shields.io/badge/Watch_the_demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=XHST7RUHpL4)
 
 *A publisher pushes a snapshot and a receiver picks it up — the whole loop, start to finish.*
 

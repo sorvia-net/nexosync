@@ -9,6 +9,7 @@ import com.sorvia.nexosync.engine.SyncOrchestrator;
 import com.sorvia.nexosync.github.GitHubClient;
 import com.sorvia.nexosync.lang.LanguageManager;
 import com.sorvia.nexosync.log.NexoSyncLogger;
+import com.sorvia.nexosync.log.StartupBanner;
 import com.sorvia.nexosync.nexo.NexoBridge;
 import com.sorvia.nexosync.notify.DiscordNotifier;
 import com.sorvia.nexosync.platform.PlatformScheduler;
@@ -52,6 +53,8 @@ public final class NexoSyncPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        StartupBanner.print(getPluginMeta().getName(), version());
+
         this.serverRoot = Bukkit.getWorldContainer().toPath().toAbsolutePath().normalize();
         this.log = new NexoSyncLogger(getLogger(), secretMask);
         this.language = new LanguageManager(this);

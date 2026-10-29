@@ -112,7 +112,7 @@ No proxy plugin. No database. No server-to-server connection. **Just GitHub.**
 
 ### 1. Install
 
-Drop `NexoSync-1.0.0.jar` into `plugins/` and start the server. NexoSync creates:
+Drop `NexoSync-1.0.1.jar` into `plugins/` and start the server. NexoSync creates:
 
 ```
 plugins/NexoSync/
@@ -384,7 +384,7 @@ leaves a blank message on screen.
 The console reports **outcomes**, not steps:
 
 ```
-[NexoSync] NexoSync 1.0.0 by Sorvia Development Solutions | Paper 1.21.4 | Nexo 1.10.0 | mode RECEIVER
+[NexoSync] NexoSync 1.0.1 by Sorvia Development Solutions | Paper 1.21.4 | Nexo 1.10.0 | mode RECEIVER
 [NexoSync] Synchronizing glyphs, items, pack/external_packs in plugins/Nexo
 [NexoSync] Checking GitHub for new snapshots every 60 seconds
 [NexoSync] [6d7f3e81] Updated v41 -> v42 in 4.82s (3 added, 14 modified, 2 removed).
@@ -588,8 +588,8 @@ content is proprietary, use a private repository. NexoSync does not encrypt reso
 Yes — any server with a write token can. NexoSync has no "master" server. Just avoid pushing from
 two servers at the same time, and pick the higher version if you do.
 
-**What is the difference between "NexoSync 1.0.0" and "snapshot v42"?**
-`1.0.0` is the plugin version. `v42` is your content version. Updating the plugin does not change
+**What is the difference between "NexoSync 1.0.1" and "snapshot v42"?**
+`1.0.1` is the plugin version. `v42` is your content version. Updating the plugin does not change
 your snapshot, and publishing a snapshot does not change the plugin.
 
 **How much does a 60-second check cost?**
@@ -622,7 +622,7 @@ Java 21+ is the only prerequisite — the included wrapper fetches Maven itself.
 mvnw.cmd package      # Windows
 ```
 
-The plugin lands at `target/NexoSync-1.0.0.jar`. Tests run automatically as part of the build.
+The plugin lands at `target/NexoSync-1.0.1.jar`. Tests run automatically as part of the build.
 
 ---
 

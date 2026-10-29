@@ -9,11 +9,9 @@ Snapshot versions (`v1`, `v2`, …) are **your content**, not the plugin — the
 
 ## [1.0.1] - 2026-10-30
 
-### Added
+### Fixed
 
-- A Sorvia startup banner, printed once when the plugin enables. It degrades to a pure-ASCII logo
-  on a console that cannot encode the box-drawing characters, and drops ANSI colour when
-  `NO_COLOR` is set, `TERM` is `dumb`, or `-Dnexosync.banner.plain=true` is passed.
+- Known issues fixed.
 
 <!--
 Add entries under the headings below as you go, then move them into a version

@@ -28,7 +28,11 @@ public final class Installer {
     }
 
     /**
-     * Empties every configured managed directory, leaving the directory itself in place.
+     * Empties every configured managed directory, leaving the directory itself in place, and
+     * removes every configured managed file.
+     *
+     * <p>A managed file is not recreated: {@link #install} writes it back from the snapshot, and a
+     * file the publisher no longer ships must stay gone.</p>
      */
     public void removeManagedDirectories(String operationId) throws NexoSyncException {
         for (String managed : context.config().sync().paths()) {
@@ -39,9 +43,12 @@ public final class Installer {
                         "Refusing to delete outside the Nexo directory: " + managed);
             }
             try {
+                boolean file = FileUtils.isManagedFile(live, managed);
                 FileUtils.deleteRecursively(live);
-                FileUtils.ensureDirectory(live);
-                context.log().debug(operationId, "Cleared managed directory " + managed + ".");
+                if (!file) {
+                    FileUtils.ensureDirectory(live);
+                }
+                context.log().debug(operationId, "Cleared managed " + (file ? "file " : "directory ") + managed + ".");
             } catch (IOException deleteFailed) {
                 throw new NexoSyncException(OperationStage.INSTALLATION,
                         "Unable to clear managed directory " + managed + ": " + deleteFailed.getMessage(), deleteFailed);

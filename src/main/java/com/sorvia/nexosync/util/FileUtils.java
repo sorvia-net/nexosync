@@ -29,6 +29,26 @@ public final class FileUtils {
         Files.createDirectories(directory);
     }
 
+    /**
+     * Decides whether a {@code sync.paths} entry names a single file rather than a directory.
+     *
+     * <p>What is on disk wins. Only when the path does not exist yet - a receiver that has never
+     * installed it - does the name decide: a final segment with an extension ({@code inventory.yml})
+     * is a file, anything else ({@code items}, {@code pack/external_packs}) is a directory. Getting
+     * this wrong is not cosmetic: treating {@code inventory.yml} as a directory would create a
+     * folder of that name, and the real file could then never be installed over it.</p>
+     */
+    public static boolean isManagedFile(Path live, String managed) {
+        if (Files.isRegularFile(live, LinkOption.NOFOLLOW_LINKS)) {
+            return true;
+        }
+        if (Files.exists(live, LinkOption.NOFOLLOW_LINKS)) {
+            return false;
+        }
+        String name = managed.substring(managed.lastIndexOf('/') + 1);
+        return name.lastIndexOf('.') > 0;
+    }
+
     public static void deleteRecursively(Path path) throws IOException {
         if (path == null || !Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
             return;

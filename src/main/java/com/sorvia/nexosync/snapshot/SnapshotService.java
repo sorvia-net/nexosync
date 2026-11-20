@@ -100,22 +100,33 @@ public final class SnapshotService {
                 log.debug(operationId, "Managed path " + managed + " does not exist yet, treating it as empty.");
                 continue;
             }
-            if (!Files.isDirectory(root, LinkOption.NOFOLLOW_LINKS)) {
+            if (Files.isSymbolicLink(root) && config.safety().rejectSymbolicLinks()) {
                 throw new NexoSyncException(OperationStage.CONFIGURATION,
-                        "Configured sync path is not a directory: " + managed);
+                        "Configured sync path is a symbolic link: " + managed);
             }
 
-            List<String> relative;
-            try {
-                relative = FileUtils.listRelativeFiles(root, config.safety().rejectSymbolicLinks());
-            } catch (IOException scanFailed) {
+            // A single file such as inventory.yml is its own one-entry snapshot path; a directory
+            // contributes every file beneath it.
+            Map<String, Path> found = new TreeMap<>();
+            if (Files.isRegularFile(root, LinkOption.NOFOLLOW_LINKS)) {
+                found.put(managed, root);
+            } else if (Files.isDirectory(root, LinkOption.NOFOLLOW_LINKS)) {
+                try {
+                    for (String relativePath : FileUtils.listRelativeFiles(root, config.safety().rejectSymbolicLinks())) {
+                        found.put(managed + "/" + relativePath, root.resolve(relativePath));
+                    }
+                } catch (IOException scanFailed) {
+                    throw new NexoSyncException(OperationStage.CONFIGURATION,
+                            "Unable to read managed path " + managed + ": " + scanFailed.getMessage(), scanFailed);
+                }
+            } else {
                 throw new NexoSyncException(OperationStage.CONFIGURATION,
-                        "Unable to read managed path " + managed + ": " + scanFailed.getMessage(), scanFailed);
+                        "Configured sync path is neither a file nor a directory: " + managed);
             }
 
-            for (String relativePath : relative) {
-                String snapshotPath = managed + "/" + relativePath;
-                Path file = root.resolve(relativePath);
+            for (Map.Entry<String, Path> candidate : found.entrySet()) {
+                String snapshotPath = candidate.getKey();
+                Path file = candidate.getValue();
 
                 try {
                     long size = Files.size(file);
@@ -338,6 +349,13 @@ public final class SnapshotService {
         Set<String> expected = manifest.byPath().keySet();
         for (String managed : manifest.managedPaths) {
             Path managedRoot = root.resolve(managed).normalize();
+            if (Files.isRegularFile(managedRoot, LinkOption.NOFOLLOW_LINKS)) {
+                // A managed file must be in the snapshot; one left over from before is a failed replace.
+                if (!expected.contains(managed)) {
+                    throw new NexoSyncException(stage, "Unexpected managed file remained: " + managed);
+                }
+                continue;
+            }
             if (!Files.isDirectory(managedRoot, LinkOption.NOFOLLOW_LINKS)) {
                 continue;
             }

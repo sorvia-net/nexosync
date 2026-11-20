@@ -7,6 +7,17 @@ Snapshot versions (`v1`, `v2`, …) are **your content**, not the plugin — the
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-20
+
+### Added
+
+- Single files can now be synchronized. List them under `sync.paths` by name, for example
+  `inventory.yml`, alongside directories such as `items`.
+
+### Changed
+
+- Nexo is now a hard dependency: NexoSync is not enabled on a server without Nexo.
+
 ## [1.0.1] - 2026-10-30
 
 ### Fixed

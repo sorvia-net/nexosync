@@ -91,6 +91,11 @@ sync:
   # that is not part of the installed snapshot is removed
   # during an update - that is how deleted files propagate.
   #
+  # Single files work too - list them by name, relative to the
+  # Nexo directory, e.g. "inventory.yml" or "mechanics.yml".
+  # A listed file is overwritten on every update, so only list
+  # files that should be identical on every server.
+  #
   # Everything outside this list (settings.yml, mechanics.yml,
   # data/, logs/, ...) is never touched.
   paths:
@@ -186,7 +191,8 @@ rollback:
 # Nexo
 # ---------------------------------------------------------
 nexo:
-  # Refuse to enable when Nexo is not installed.
+  # Redundant since plugin.yml declares Nexo as a hard dependency: the
+  # server will not enable NexoSync without it. Kept as a second check.
   required: true
 
   reload:

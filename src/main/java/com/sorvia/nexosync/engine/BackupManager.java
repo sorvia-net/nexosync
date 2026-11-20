@@ -101,6 +101,10 @@ public final class BackupManager {
         Map<String, Path> content = new LinkedHashMap<>();
         for (String managed : config.sync().paths()) {
             Path root = nexoDirectory.resolve(managed).normalize();
+            if (Files.isRegularFile(root, LinkOption.NOFOLLOW_LINKS)) {
+                content.put(managed, root);
+                continue;
+            }
             if (!Files.isDirectory(root, LinkOption.NOFOLLOW_LINKS)) {
                 continue;
             }
@@ -142,14 +146,19 @@ public final class BackupManager {
                     throw new NexoSyncException(OperationStage.ROLLBACK,
                             "Refusing to restore outside the Nexo directory: " + managed);
                 }
+                boolean file = FileUtils.isManagedFile(live, managed);
                 FileUtils.deleteRecursively(live);
 
                 Path source = staged.resolve(managed);
-                if (Files.isDirectory(source, LinkOption.NOFOLLOW_LINKS)) {
+                if (Files.isRegularFile(source, LinkOption.NOFOLLOW_LINKS)) {
+                    Files.createDirectories(live.getParent());
+                    Files.copy(source, live);
+                } else if (Files.isDirectory(source, LinkOption.NOFOLLOW_LINKS)) {
                     FileUtils.ensureDirectory(live);
                     FileUtils.copyDirectory(source, live);
-                } else {
+                } else if (!file) {
                     // The backup legitimately had nothing here; recreate the empty directory.
+                    // A missing managed file stays missing - that was the state being restored.
                     FileUtils.ensureDirectory(live);
                 }
             }
